@@ -1,0 +1,376 @@
+@charset "UTF-8";
+/**
+  Нормализация блочной модели
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/**
+  Убираем внутренние отступы слева тегам списков,
+  у которых есть атрибут class
+ */
+:where(ul, ol):where([class]) {
+  padding-left: 0;
+}
+
+/**
+  Убираем внешние отступы body и двум другим тегам,
+  у которых есть атрибут class
+ */
+body,
+:where(blockquote, figure):where([class]) {
+  margin: 0;
+}
+
+/**
+  Убираем внешние отступы вертикали нужным тегам,
+  у которых есть атрибут class
+ */
+:where(h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+dl):where([class]) {
+  margin-block: 0;
+}
+
+:where(dd[class]) {
+  margin-left: 0;
+}
+
+:where(fieldset[class]) {
+  margin-left: 0;
+  padding: 0;
+  border: none;
+}
+
+/**
+  Убираем стандартный маркер маркированному списку,
+  у которого есть атрибут class
+ */
+:where(ul[class]) {
+  list-style: none;
+}
+
+/**
+  Обнуляем вертикальные внешние отступы параграфа,
+  объявляем локальную переменную для внешнего отступа вниз,
+  чтобы избежать взаимодействие с более сложным селектором
+ */
+p {
+  --paragraphMarginBottom: 24px;
+  margin-block: 0;
+}
+
+/**
+  Внешний отступ вниз для параграфа без атрибута class,
+  который расположен не последним среди своих соседних элементов
+ */
+p:where(:not([class]):not(:last-child)) {
+  margin-bottom: var(--paragraphMarginBottom);
+}
+
+/**
+  Упрощаем работу с изображениями
+ */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/**
+  Наследуем свойства шрифт для полей ввода
+ */
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+html {
+  /**
+    Пригодится в большинстве ситуаций
+    (когда, например, нужно будет "прижать" футер к низу сайта)
+   */
+  height: 100%;
+  /**
+    Плавный скролл
+   */
+  scroll-behavior: smooth;
+}
+
+body {
+  /**
+    Пригодится в большинстве ситуаций
+    (когда, например, нужно будет "прижать" футер к низу сайта)
+   */
+  min-height: 100%;
+  /**
+    Унифицированный интерлиньяж
+   */
+  line-height: 1.5;
+}
+
+/**
+  Приводим к единому цвету svg-элементы
+ */
+svg *[fill] {
+  fill: currentColor;
+}
+
+svg *[stroke] {
+  stroke: currentColor;
+}
+
+/**
+  Чиним баг задержки смены цвета при взаимодействии с svg-элементами
+ */
+svg * {
+  transition-property: fill, stroke;
+}
+
+/**
+  Удаляем все анимации и переходы для людей,
+  которые предпочитают их не использовать
+ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/Outfit-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/Outfit-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --container-width: 350px;
+  --container-padding-x: 24px;
+  --soft-blue: hsl(215, 51%, 70%);
+  --cyan: hsl(178, 100%, 50%);
+  --very-dark-blue-main-bg: hsl(217, 54%, 11%);
+  --very-dark-blue-card-bg: hsl(216, 50%, 16%);
+  --very-dark-blue-line: hsl(215, 32%, 27%);
+  --white: hsl(0, 0%, 100%);
+  --transition-duration: 0.2s;
+  --font-family: "Outfit", sans-serif;
+  --font-size-root: 18px;
+}
+
+.container {
+  max-width: calc(var(--container-width) + var(--container-padding-x) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-x);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  clip-path: inset(100%) !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .visible-mobile {
+    display: none !important;
+  }
+}
+
+body {
+  font-size: clamp(16px, 1.25vw, 18px);
+  font-family: var(--font-family);
+  font-weight: 400;
+  color: var(--soft-blue);
+  background-color: var(--very-dark-blue-main-bg);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-content: center;
+}
+
+a,
+button,
+input,
+textarea,
+svg * {
+  transition-duration: var(--transition-duration);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  max-width: var(--container-width);
+  padding: var(--container-padding-x);
+  background-color: var(--very-dark-blue-card-bg);
+  border-radius: 0.9375rem;
+  margin: 0 auto;
+}
+.card__title {
+  margin-top: 24px;
+  color: var(--cyan);
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+.card__about {
+  margin-top: 16px;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 300;
+}
+.card__info {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+.card__price {
+  color: var(--cyan);
+  font-weight: 700;
+  text-transform: uppercase;
+  position: relative;
+  margin-left: 19.5px;
+}
+.card__price::before {
+  content: "";
+  width: 11px;
+  height: 18px;
+  background-image: url("/images/icon-ethereum.svg");
+  position: absolute;
+  top: 50%;
+  left: -16px;
+  transform: translate(0, -50%);
+}
+.card__duration {
+  position: relative;
+}
+.card__duration:before {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  background-image: url("/images/icon-clock.svg");
+  top: 50%;
+  left: -21px;
+  transform: translate(0, -50%);
+}
+.card__hr {
+  border-color: var(--very-dark-blue-line);
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+.card__author {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.card__author-avatar {
+  outline: 1px solid white;
+  border-radius: 50%;
+}
+.card__author-name {
+  transition: color var(--transition-duration) ease;
+  cursor: pointer;
+}
+.card__author-name span {
+  color: var(--white);
+  transition: color 0.2s ease;
+}
+.card__author-name:hover span {
+  color: var(--cyan);
+}
+
+.nft {
+  cursor: pointer;
+  position: relative;
+}
+.nft:hover .nft__mask {
+  display: block;
+}
+.nft__mask {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--cyan);
+  opacity: 0.6;
+  transition: 0.3s opacity allow-discrete;
+}
+.nft:hover .nft__expand-button {
+  display: block;
+}
+.nft__expand-button {
+  z-index: 1;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 25px;
+  border-radius: 50%;
+  opacity: 1;
+  transition: 0.3s opacity allow-discrete;
+}
+.nft__expand-button:focus-visible {
+  outline-color: var(--cyan);
+}
+.nft__mask, .nft__img {
+  border-radius: 0.5rem;
+}
+
+@starting-style {
+  .nft__mask,
+  .nft__expand-button {
+    opacity: 0;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,26 @@
+@use "mixins";
+
+body {
+  @include mixins.fluid-text(18, 16);
+  font-family: var(--font-family);
+  font-weight: 400;
+  color: var(--soft-blue);
+  background-color: var(--very-dark-blue-main-bg);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-content: center;
+}
+
+a,
+button,
+input,
+textarea,
+svg * {
+  transition-duration: var(--transition-duration);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
